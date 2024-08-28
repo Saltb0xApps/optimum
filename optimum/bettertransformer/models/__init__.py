@@ -29,6 +29,7 @@ from .decoder_models import (
     OPTAttentionLayerBetterTransformer,
     PegasusAttentionLayerBetterTransformer,
     T5AttentionLayerBetterTransformer,
+    MusicGenAttentionLayerBetterTransformer,
 )
 from .encoder_models import (
     AlbertLayerBetterTransformer,
@@ -83,6 +84,10 @@ class BetterTransformerManager:
         },
         "markuplm": {"MarkupLMLayer": BertLayerBetterTransformer},
         "mbart": {"MBartEncoderLayer": MBartEncoderLayerBetterTransformer},
+        "musicgen": {
+            "T5Attention": T5AttentionLayerBetterTransformer,
+            "MusicgenAttention": MusicGenAttentionLayerBetterTransformer,
+        },
         "opt": {"OPTAttention": OPTAttentionLayerBetterTransformer},
         "pegasus": {"PegasusAttention": PegasusAttentionLayerBetterTransformer},
         "rembert": {"RemBertLayer": BertLayerBetterTransformer},
@@ -135,6 +140,7 @@ class BetterTransformerManager:
         "opt",
         "pegasus",
         "t5",
+        "musicgen",
     }
 
     NOT_REQUIRES_STRICT_VALIDATION = {

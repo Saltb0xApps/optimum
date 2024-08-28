@@ -6,3 +6,9 @@ class BarkSelfAttention(metaclass=DummyObject):
 
     def __init__(self, *args, **kwargs):
         requires_backends(self, ["transformers_431"])
+
+class MusicgenAttention(metaclass=DummyObject):
+    _backends = ["transformers_431"]
+
+    def __init__(self, *args, **kwargs):
+        requires_backends(self, ["transformers_431"])

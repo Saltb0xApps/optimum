@@ -33,9 +33,10 @@ from ...utils.import_utils import check_if_transformers_greater
 
 
 if check_if_transformers_greater("4.31"):
+    from transformers.models.musicgen.modeling_musicgen import MusicgenAttention
     from transformers.models.bark.modeling_bark import BarkSelfAttention
 else:
-    from ...utils.dummy_bettertransformer_objects import BarkSelfAttention
+    from ...utils.dummy_bettertransformer_objects import BarkSelfAttention, LlamaAttention, MusicgenAttention
 
 from .attention import (
     bark_wrapped_scaled_dot_product,
@@ -280,6 +281,8 @@ class T5AttentionLayerBetterTransformer(BetterTransformerBaseLayer, T5Attention,
     def __init__(self, layer: "nn.Module", config: "PretrainedConfig"):
         if hasattr(config, "text_config"):
             config = config.text_config
+        elif hasattr(config, "text_encoder"):
+            config = config.text_encoder
         super().__init__(config)
 
         with torch.device("meta"):
@@ -361,6 +364,13 @@ class MarianAttentionLayerBetterTransformer(BetterTransformerBaseLayer, MarianAt
     def forward(self, *args, **kwargs):
         return bart_forward(self, *args, **kwargs)
 
+class MusicGenAttentionLayerBetterTransformer(BetterTransformerBaseLayer, MusicgenAttention, nn.Module):
+    def __init__(self, layer: "nn.Module", config: "PretrainedConfig"):
+        super().__init__(config)
+        bart_bettertransformer_init(self, layer, config)
+
+    def forward(self, *args, **kwargs):
+        return bart_forward(self, *args, **kwargs)
 
 class PegasusAttentionLayerBetterTransformer(BetterTransformerBaseLayer, PegasusAttention, nn.Module):
     def __init__(self, layer: "nn.Module", config: "PretrainedConfig"):
